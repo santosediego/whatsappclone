@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ChatListItem from './core/components/ChatListItem/ChatListItem';
+import ChatIntro from './core/components/ChatIntro/ChatIntro';
 import './App.css';
 
 //https://mui.com/pt/material-ui/material-icons/
@@ -13,6 +14,9 @@ function App() {
   const [chatlist, setChatlist] = useState([
     {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
   ]);
+
+  const [activeChat, setActiveChat] = useState({});
+
   return (
     <div className='app-window'>
       <div className='sidebar'>
@@ -20,7 +24,7 @@ function App() {
         <header>
           <img
             className='header--avatar'
-            src=""
+            src="https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B"
             alt=""
           />
 
@@ -54,7 +58,12 @@ function App() {
 
       </div>
       <div className='contentarea'>
-        area do chat
+        {activeChat.chatId !== undefined &&
+          <p>Janela do chat</p>//<ChatWindow />
+        }
+        {activeChat.chatId === undefined &&
+          <ChatIntro />
+        }
       </div>
     </div>
   );

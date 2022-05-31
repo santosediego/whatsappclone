@@ -5,7 +5,7 @@ function ChatListItem() {
         <div className='chatListItem'>
             <img
                 className='chatListItem--avatar'
-                src=""
+                src="https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B"
                 alt=""
             />
             <div className='chatListItem--lines'>
