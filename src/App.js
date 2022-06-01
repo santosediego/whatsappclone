@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ChatListItem from './core/components/ChatListItem/ChatListItem';
 import ChatIntro from './core/components/ChatIntro/ChatIntro';
+import ChatWindow from './core/components/ChatWindow/ChatWindow';
 import './App.css';
 
 //https://mui.com/pt/material-ui/material-icons/
@@ -12,7 +13,10 @@ import SearchIcon from '@mui/icons-material/Search';
 function App() {
 
   const [chatlist, setChatlist] = useState([
-    {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
+    { chatId: 1, title: 'Fulano Lano', image: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B' },
+    { chatId: 2, title: 'Beltrano de Tal', image: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B' },
+    { chatId: 3, title: 'Maria João', image: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B' },
+    { chatId: 4, title: 'João Maria', image: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B' },
   ]);
 
   const [activeChat, setActiveChat] = useState({});
@@ -52,6 +56,9 @@ function App() {
           {chatlist.map((item, key) => (
             <ChatListItem
               key={key}
+              data={item}
+              active={activeChat.chatId === chatlist[key].chatId}
+              onClick={() => setActiveChat(chatlist[key])}
             />
           ))}
         </div>
@@ -59,7 +66,7 @@ function App() {
       </div>
       <div className='contentarea'>
         {activeChat.chatId !== undefined &&
-          <p>Janela do chat</p>//<ChatWindow />
+          <ChatWindow />
         }
         {activeChat.chatId === undefined &&
           <ChatIntro />

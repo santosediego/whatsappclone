@@ -1,16 +1,19 @@
 import './ChatListItem.css';
 
-function ChatListItem() {
+function ChatListItem({ onClick, active, data }) {
     return (
-        <div className='chatListItem'>
+        <div
+            className={`chatListItem ${active ? 'active' : ''}`}
+            onClick={onClick}
+        >
             <img
                 className='chatListItem--avatar'
-                src="https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B"
+                src={data.image}
                 alt=""
             />
             <div className='chatListItem--lines'>
                 <div className='chatListItem--line'>
-                    <div className='chatListItem--name'>Diego Santos</div>
+                    <div className='chatListItem--name' title={`${data.title}`}>{data.title}</div>
                     <div className='chatListItem--date'>09:07</div>
                 </div>
                 <div className='chatListItem--line'>
