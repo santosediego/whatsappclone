@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
+import MessageItem from '../MessageItem/MessageItem';
 import './ChatWindow.css';
 
 import SearchIcon from '@mui/icons-material/Search';
@@ -10,7 +11,7 @@ import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
 import MicIcon from '@mui/icons-material/Mic';
 
-function ChatWindow() {
+function ChatWindow({ user }) {
 
     let recognition = null;
     let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -18,10 +19,47 @@ function ChatWindow() {
         recognition = new SpeechRecognition();
     }
 
+    const body = useRef(); //Para controlar a div bory, usaremos para sentar a conversa no final;
     const [emojiOpen, setEmojiOpen] = useState(false);
     const [text, setText] = useState('');
     const [listening, setListening] = useState(false);
-    const [list, setList] = useState([]);
+    const [list, setList] = useState([
+        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
+        { author: 123, body: 'In at nibh mauris.' },
+        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
+        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
+        { author: 123, body: 'In at nibh mauris.' },
+        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
+        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
+        { author: 123, body: 'In at nibh mauris.' },
+        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
+        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
+        { author: 123, body: 'In at nibh mauris.' },
+        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
+        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
+        { author: 123, body: 'In at nibh mauris.' },
+        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
+        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
+        { author: 123, body: 'In at nibh mauris.' },
+        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
+        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
+        { author: 123, body: 'In at nibh mauris.' },
+        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
+    ]);
+
+    useEffect(() => {
+        //Se a altura do body for maior que a disponível calcula e joga para o final;
+        if (body.current.scrollHeight > body.current.offsetHeight) {
+            body.current.scrollTop = body.current.scrollHeight - body.current.offsetHeight;
+        }
+    }, [list]);
 
     const handleEmojiClick = (e, emojiObject) => {
         setText(text + emojiObject.emoji)
@@ -78,9 +116,13 @@ function ChatWindow() {
                 </div>
             </div>
 
-            <div className='chatWindow--body'>
+            <div ref={body} className='chatWindow--body'>
                 {list.map((item, key) => (
-                    <p>Mensagem...</p>//<MessageItem />
+                    <MessageItem
+                        key={key}
+                        data={item}
+                        user={user}
+                    />
                 ))}
             </div>
 

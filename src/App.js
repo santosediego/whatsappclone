@@ -18,8 +18,12 @@ function App() {
     { chatId: 3, title: 'Maria João', image: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B' },
     { chatId: 4, title: 'João Maria', image: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B' },
   ]);
-
   const [activeChat, setActiveChat] = useState({});
+  const [user, setUser] = useState({
+    id: 1234,
+    avatar: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B',
+    name: 'Diego Santos'
+  })
 
   return (
     <div className='app-window'>
@@ -28,7 +32,7 @@ function App() {
         <header>
           <img
             className='header--avatar'
-            src="https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B"
+            src={user.avatar}
             alt=""
           />
 
@@ -66,7 +70,9 @@ function App() {
       </div>
       <div className='contentarea'>
         {activeChat.chatId !== undefined &&
-          <ChatWindow />
+          <ChatWindow
+            user={user}
+          />
         }
         {activeChat.chatId === undefined &&
           <ChatIntro />
