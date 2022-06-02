@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChatListItem from './core/components/ChatListItem/ChatListItem';
 import ChatIntro from './core/components/ChatIntro/ChatIntro';
 import ChatWindow from './core/components/ChatWindow/ChatWindow';
+import NewChat from './core/components/NewChat/NewChat';
 import './App.css';
 
 //https://mui.com/pt/material-ui/material-icons/
@@ -19,15 +20,27 @@ function App() {
     { chatId: 4, title: 'João Maria', image: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B' },
   ]);
   const [activeChat, setActiveChat] = useState({});
+  const [showNewChat, setShowNewChat] = useState(false);
   const [user, setUser] = useState({
     id: 1234,
     avatar: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B',
     name: 'Diego Santos'
-  })
+  });
+
+  const handleNewChat = () => {
+    setShowNewChat(true);
+  }
 
   return (
     <div className='app-window'>
       <div className='sidebar'>
+
+        <NewChat
+          chatList={chatlist}
+          user={user}
+          show={showNewChat}
+          setShow={setShowNewChat}
+        />
 
         <header>
           <img
@@ -40,7 +53,10 @@ function App() {
             <div className='header--btn'>
               <DonutLargeIcon style={{ color: '#919191' }} />
             </div>
-            <div className='header--btn'>
+            <div
+              onClick={handleNewChat}
+              className='header--btn'
+            >
               <ChatIcon style={{ color: '#919191' }} />
             </div>
             <div className='header--btn'>
