@@ -16,15 +16,25 @@ import SearchIcon from '@mui/icons-material/Search';
 
 function App() {
 
-  const [chatlist, setChatlist] = useState([
-    { chatId: 1, title: 'Fulano Lano', image: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B' },
-    { chatId: 2, title: 'Beltrano de Tal', image: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B' },
-    { chatId: 3, title: 'Maria João', image: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B' },
-    { chatId: 4, title: 'João Maria', image: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B' },
-  ]);
+  const [chatlist, setChatlist] = useState([]);
   const [activeChat, setActiveChat] = useState({});
   const [showNewChat, setShowNewChat] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    id: '6BsnDDx0ElbUMgOJwHLS8DZAanE2',
+    name: 'Diego Santos',
+    avatar: 'https://graph.facebook.com/398710652314273/picture',
+  });
+
+  useEffect(() => {
+    if (user !== null) {
+      let unsub = Api.onChatList(user.id, setChatlist);
+      return unsub;
+    }
+  }, [user]);
+
+  const handleNewChat = () => {
+    setShowNewChat(true);
+  }
 
   const handleLoginData = async (u) => {
     let newUser = {
@@ -38,10 +48,6 @@ function App() {
 
   if (user == null) {
     return (<Login onReceive={handleLoginData} />)
-  }
-
-  const handleNewChat = () => {
-    setShowNewChat(true);
   }
 
   return (
