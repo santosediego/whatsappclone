@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
+import { async } from '@firebase/util';
 import ChatListItem from './core/components/ChatListItem/ChatListItem';
 import ChatIntro from './core/components/ChatIntro/ChatIntro';
 import ChatWindow from './core/components/ChatWindow/ChatWindow';
 import NewChat from './core/components/NewChat/NewChat';
+import Login from './core/components/Login/Login';
+import Api from './core/utils/Api';
 import './App.css';
 
 //https://mui.com/pt/material-ui/material-icons/
@@ -21,11 +24,21 @@ function App() {
   ]);
   const [activeChat, setActiveChat] = useState({});
   const [showNewChat, setShowNewChat] = useState(false);
-  const [user, setUser] = useState({
-    id: 1234,
-    avatar: 'https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B',
-    name: 'Diego Santos'
-  });
+  const [user, setUser] = useState(null);
+
+  const handleLoginData = async (u) => {
+    let newUser = {
+      id: u.uid,
+      name: u.displayName,
+      avatar: u.photoURL,
+    }
+    await Api.addUser(newUser);
+    setUser(newUser);
+  }
+
+  if (user == null) {
+    return (<Login onReceive={handleLoginData} />)
+  }
 
   const handleNewChat = () => {
     setShowNewChat(true);
