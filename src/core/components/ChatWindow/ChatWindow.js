@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import MessageItem from '../MessageItem/MessageItem';
+import Api from '../../utils/Api';
 import './ChatWindow.css';
 
 import SearchIcon from '@mui/icons-material/Search';
@@ -11,7 +12,7 @@ import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
 import MicIcon from '@mui/icons-material/Mic';
 
-function ChatWindow({ user }) {
+function ChatWindow({ user, data }) {
 
     let recognition = null;
     let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -23,36 +24,15 @@ function ChatWindow({ user }) {
     const [emojiOpen, setEmojiOpen] = useState(false);
     const [text, setText] = useState('');
     const [listening, setListening] = useState(false);
-    const [list, setList] = useState([
-        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
-        { author: 123, body: 'In at nibh mauris.' },
-        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
-        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
-        { author: 123, body: 'In at nibh mauris.' },
-        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
-        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
-        { author: 123, body: 'In at nibh mauris.' },
-        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
-        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
-        { author: 123, body: 'In at nibh mauris.' },
-        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
-        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
-        { author: 123, body: 'In at nibh mauris.' },
-        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
-        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
-        { author: 123, body: 'In at nibh mauris.' },
-        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
-        { author: 123, body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-        { author: 123, body: 'Aliquam venenatis porta velit at euismod.' },
-        { author: 123, body: 'In at nibh mauris.' },
-        { author: 1234, body: ' Suspendisse molestie pulvinar consequat. Fusce non odio vitae quam dictum posuere sed iaculis felis.' },
-    ]);
+    const [list, setList] = useState([]);
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        //Monitora as mensagens do chat
+        setList([]);
+        let unsub = Api.onChatContent(data.chatId, setList, setUsers);
+        return unsub;
+    }, [data.chatId]);
 
     useEffect(() => {
         //Se a altura do body for maior que a disponível calcula e joga para o final;
@@ -73,7 +53,20 @@ function ChatWindow({ user }) {
         setEmojiOpen(false);
     }
 
-    const handleSendClick = () => { }
+    const handleSendClick = () => {
+        if (text !== '') {
+            Api.sendMessage(data, user.id, 'text', text, users)
+            setText('');
+            setEmojiOpen(false);
+
+        }
+    }
+
+    const handleInputKeyUp = (e) => {
+        if (e.keyCode === 13) {
+            handleSendClick();
+        }
+    }
 
     const handleMicClick = () => {
         //Função de gravação do navegador
@@ -98,11 +91,11 @@ function ChatWindow({ user }) {
                 <div className='chatWindow--headerInfo'>
                     <img
                         className='chatWindow--avatar'
-                        src='https://pps.whatsapp.net/v/t61.24694-24/187140473_140232428480416_4793432016690447685_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=72b36341dd2fdf0664f820697892187c&oe=629D4C9B'
+                        src={data.image}
                         alt=""
                     />
                     <div className='chatWindow--name'>
-                        Diego Santos
+                        {data.title}
                     </div>
                 </div>
                 <div className='chatWindow--headerButtons'>
@@ -168,6 +161,7 @@ function ChatWindow({ user }) {
                         placeholder='Mensagem'
                         value={text}
                         onChange={e => setText(e.target.value)}
+                        onKeyUp={handleInputKeyUp}
                     />
                 </div>
 

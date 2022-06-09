@@ -19,11 +19,7 @@ function App() {
   const [chatlist, setChatlist] = useState([]);
   const [activeChat, setActiveChat] = useState({});
   const [showNewChat, setShowNewChat] = useState(false);
-  const [user, setUser] = useState({
-    id: '6BsnDDx0ElbUMgOJwHLS8DZAanE2',
-    name: 'Diego Santos',
-    avatar: 'https://graph.facebook.com/398710652314273/picture',
-  });
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (user !== null) {
@@ -107,6 +103,7 @@ function App() {
         {activeChat.chatId !== undefined &&
           <ChatWindow
             user={user}
+            data={activeChat}
           />
         }
         {activeChat.chatId === undefined &&
